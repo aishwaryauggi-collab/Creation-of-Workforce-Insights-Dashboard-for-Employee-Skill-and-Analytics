@@ -4,7 +4,7 @@ An end-to-end predictive workforce analytics system. The platform combines machi
 
 ---
 
-## 📁 System Architecture & Directory Layout
+## System Architecture & Directory Layout
 
 ```text
 New folder/
@@ -34,174 +34,459 @@ New folder/
 
 ---
 
-## 🧠 Machine Learning & Data Pipeline (Steps 1–5)
+# Machine Learning & Data Pipeline
 
-### 1. Data Prep & Feature Encoding
-Categorical variables are handled to prepare the 1,470-row HR dataset for the classifiers:
-*   **Binary Mapping:** `Attrition` (`Yes` ➔ `1`, `No` ➔ `0`), `OverTime` (`Yes` ➔ `1`, `No` ➔ `0`), and `Gender` (`Male` ➔ `1`, `Female` ➔ `0`).
-*   **One-Hot Encoding:** Variables including `Department`, `JobRole`, `MaritalStatus`, `BusinessTravel`, `EducationField`, and dynamic age/tenure categories are encoded into **57 binary features**.
-*   **Feature Scaling:** Standardized using `StandardScaler` to bring all values to $\mu = 0$ and $\sigma = 1$, which is critical for distance-based estimators like Logistic Regression.
+## Step 1: Data Prep & Feature Encoding
 
-### 2. Model Evaluation
-Models are fit on a stratified 80/20 train/test split. Predictive performance results on the test set (294 employees) are detailed below:
+The 1,470-row HR dataset is prepared and transformed before being used for machine learning classification.
 
-| Metric | Logistic Regression | Random Forest | XGBoost |
-| :--- | :---: | :---: | :---: |
-| **Accuracy** | 76.87% | **83.67%** | 82.65% |
-| **Precision** | 37.65% | 42.86% | **44.74%** |
-| **Recall (Class 1)** | **68.09%** | 6.38% | 36.17% |
-| **F1-Score** | **48.48%** | 11.11% | 40.00% |
-| **ROC-AUC** | **80.58%** | 77.53% | 76.07% |
+### Binary Mapping
 
-*   **Logistic Regression (Active Model):** Selected as the primary model due to its high **Recall (68.09%)** and **ROC-AUC (80.58%)**. In HR risk-flagging scenarios, capturing a true positive (an employee who leaves) is prioritized over avoiding false positives, making recall the key performance metric.
-*   **Confusion Matrices:**
-    *   *Logistic Regression:* 194 True Negatives, 32 True Positives, 53 False Positives, 15 False Negatives.
-    *   *Random Forest:* 243 True Negatives, 3 True Positives, 4 False Positives, 44 False Negatives.
-    *   *XGBoost:* 226 True Negatives, 17 True Positives, 21 False Positives, 30 False Negatives.
+The following categorical values are converted into numerical values:
 
-### 3. Diagnostic Health & Skill-Gap Scoring
-Three business metrics are computed and stored in [encoded_data.xlsx](file:///c:/Users/anil5/Desktop/New%20folder/encoded_data.xlsx):
-*   **Skill Gap Flag:** Sets `Skill_Gap_Flag = 1` for employees meeting `TrainingTimesLastYear <= 1` and `PerformanceRating <= 3` (7.2% of the workforce).
-*   **Promotion Ready Flag:** Sets `Promotion = 1` for employees meeting `YearsSinceLastPromotion >= 3`, `PerformanceRating >= 3`, and `JobLevel < 5` (23.1% of the workforce).
-*   **Workforce Health Score:** Computed as a weighted index:
-    $$\text{Health Score Raw} = 0.30 \times \text{JobSatisfaction} + 0.20 \times \text{TrainingTimesLastYear}_{\text{norm}} + 0.25 \times \text{PerformanceRating} + 0.25 \times \text{WorkLifeBalance}$$
-    Where:
-    $$\text{TrainingTimesLastYear}_{\text{norm}} = 1.0 + \left(\frac{\text{TrainingTimesLastYear}}{6.0}\right) \times 3.0$$
-    The raw score is normalized on a scale of 0 to 100:
-    $$\text{Health Score} = \left(\frac{\text{Health Score Raw} - 1.0}{3.0}\right) \times 100$$
-    *   `>= 75`: **Healthy**
-    *   `50-74`: **Moderate**
-    *   `< 50`: **At-Risk**
+* `Attrition`: `Yes` to `1`, `No` to `0`
+* `OverTime`: `Yes` to `1`, `No` to `0`
+* `Gender`: `Male` to `1`, `Female` to `0`
+
+### One-Hot Encoding
+
+The following variables are converted into multiple binary features:
+
+* `Department`
+* `JobRole`
+* `MaritalStatus`
+* `BusinessTravel`
+* `EducationField`
+* Dynamic age categories
+* Dynamic tenure categories
+
+This process creates a total of **57 binary features**.
+
+### Feature Scaling
+
+The features are standardized using `StandardScaler`.
+
+This brings all values to:
+
+* Mean: `μ = 0`
+* Standard deviation: `σ = 1`
+
+This is important for models such as Logistic Regression.
 
 ---
 
-## 🌐 API Endpoint Documentation (Step 6)
+## Step 2: Model Evaluation
 
-The web backend is built using **FastAPI** and hosted via **Uvicorn**.
+The models are trained using a stratified 80/20 train-test split.
 
-### 1. `POST /predict-attrition`
-Accepts a list of employee profiles, standardizes inputs, and runs inference. Returns predictions and log-odds contributions explaining the model's output.
+The test dataset contains **294 employees**.
 
-*   **Mathematical Explanation:** The contribution $C_i$ of scaled feature $i$ is calculated as:
-    $$C_i = w_i \times X_{\text{scaled}, i}$$
-    Where $w_i$ is the coefficient of feature $i$ in the Logistic Regression model. Features with high positive contributions increase the attrition log-odds (risk drivers), while negative contributions lower it (retention drivers).
+| Metric           | Logistic Regression | Random Forest | XGBoost |
+| :--------------- | :-----------------: | :-----------: | :-----: |
+| Accuracy         |        76.87%       |     83.67%    |  82.65% |
+| Precision        |        37.65%       |     42.86%    |  44.74% |
+| Recall (Class 1) |        68.09%       |     6.38%     |  36.17% |
+| F1-Score         |        48.48%       |     11.11%    |  40.00% |
+| ROC-AUC          |        80.58%       |     77.53%    |  76.07% |
 
-*   **Request Example:**
-    ```json
-    [
-      {
-        "Age": 30.0,
-        "Department": "Sales",
-        "JobRole": "Sales Representative",
-        "MonthlyIncome": 2500.0,
-        "OverTime": "Yes",
-        "JobSatisfaction": 2,
-        "TotalWorkingYears": 5.0
-      }
-    ]
-    ```
-*   **Response Example:**
-    ```json
+### Logistic Regression
+
+Logistic Regression is selected as the active model because of its high:
+
+* Recall: `68.09%`
+* ROC-AUC: `80.58%`
+
+For employee attrition prediction, identifying employees who may leave is more important than avoiding every false positive. Therefore, recall is considered an important metric for this use case.
+
+### Confusion Matrices
+
+**Logistic Regression**
+
+* True Negatives: `194`
+* True Positives: `32`
+* False Positives: `53`
+* False Negatives: `15`
+
+**Random Forest**
+
+* True Negatives: `243`
+* True Positives: `3`
+* False Positives: `4`
+* False Negatives: `44`
+
+**XGBoost**
+
+* True Negatives: `226`
+* True Positives: `17`
+* False Positives: `21`
+* False Negatives: `30`
+
+---
+
+# Diagnostic Health & Skill-Gap Scoring
+
+Three business metrics are calculated and stored in `encoded_data.xlsx`.
+
+## Skill Gap Flag
+
+`Skill_Gap_Flag = 1` is assigned to employees who meet the following conditions:
+
+```text
+TrainingTimesLastYear <= 1
+PerformanceRating <= 3
+```
+
+This represents **7.2% of the workforce**.
+
+---
+
+## Promotion Ready Flag
+
+`Promotion = 1` is assigned to employees who meet the following conditions:
+
+```text
+YearsSinceLastPromotion >= 3
+PerformanceRating >= 3
+JobLevel < 5
+```
+
+This represents **23.1% of the workforce**.
+
+---
+
+## Workforce Health Score
+
+The Workforce Health Score is calculated using the following weighted formula:
+
+```text
+Health Score Raw =
+0.30 × JobSatisfaction
++ 0.20 × TrainingTimesLastYearnorm
++ 0.25 × PerformanceRating
++ 0.25 × WorkLifeBalance
+```
+
+The normalized training value is calculated as:
+
+```text
+TrainingTimesLastYearnorm =
+1.0 + (TrainingTimesLastYear / 6.0) × 3.0
+```
+
+The final health score is normalized to a scale from 0 to 100:
+
+```text
+Health Score =
+((Health Score Raw - 1.0) / 3.0) × 100
+```
+
+### Health Score Categories
+
+* `>= 75`: Healthy
+* `50–74`: Moderate
+* `< 50`: At-Risk
+
+---
+
+# API Endpoint Documentation
+
+The web backend is built using FastAPI and hosted through Uvicorn.
+
+---
+
+## 1. POST /predict-attrition
+
+This endpoint accepts employee profiles, standardizes the input data, and runs the Logistic Regression model.
+
+It returns:
+
+* Attrition prediction
+* Attrition probability
+* XGBoost reference probability
+* Risk score category
+* Top risk drivers
+* Top retention drivers
+
+### Mathematical Explanation
+
+The contribution of each scaled feature is calculated as:
+
+```text
+Ci = wi × Xscaled,i
+```
+
+Where:
+
+* `wi` is the Logistic Regression coefficient for feature `i`
+* `Xscaled,i` is the scaled value of that feature
+
+Features with high positive contributions increase attrition risk, while negative contributions reduce attrition risk.
+
+### Request Example
+
+```json
+[
+  {
+    "Age": 30.0,
+    "Department": "Sales",
+    "JobRole": "Sales Representative",
+    "MonthlyIncome": 2500.0,
+    "OverTime": "Yes",
+    "JobSatisfaction": 2,
+    "TotalWorkingYears": 5.0
+  }
+]
+```
+
+### Response Example
+
+```json
+{
+  "predictions": [
     {
-      "predictions": [
+      "employee_index": 0,
+      "attrition_prediction": 0,
+      "attrition_probability": 0.3573,
+      "xgb_probability_ref": 0.4124,
+      "risk_score_category": "Medium Risk",
+      "top_risk_drivers": [
         {
-          "employee_index": 0,
-          "attrition_prediction": 0,
-          "attrition_probability": 0.3573,
-          "xgb_probability_ref": 0.4124,
-          "risk_score_category": "Medium Risk",
-          "top_risk_drivers": [
-            { "feature": "OverTime", "contribution": 1.2592 },
-            { "feature": "TotalWorkingYears", "contribution": 0.7017 }
-          ],
-          "top_retention_drivers": [
-            { "feature": "EducationField_Life Sciences", "contribution": -0.6479 }
-          ]
+          "feature": "OverTime",
+          "contribution": 1.2592
+        },
+        {
+          "feature": "TotalWorkingYears",
+          "contribution": 0.7017
+        }
+      ],
+      "top_retention_drivers": [
+        {
+          "feature": "EducationField_Life Sciences",
+          "contribution": -0.6479
         }
       ]
     }
-    ```
-
-### 2. `POST /health-score`
-Computes the workforce health score category.
-*   **Request Example:**
-    ```json
-    {
-      "JobSatisfaction": 3,
-      "TrainingTimesLastYear": 2,
-      "PerformanceRating": 4,
-      "WorkLifeBalance": 2
-    }
-    ```
-*   **Response Example:**
-    ```json
-    {
-      "health_score_raw": 2.8,
-      "health_score": 60.0,
-      "category": "Moderate"
-    }
-    ```
-
-### 3. `POST /query`
-RAG endpoint to query the company HR handbook.
-*   **Request Example:**
-    ```json
-    {
-      "query": "What are the rules regarding hybrid and remote work?"
-    }
-    ```
-*   **Response Example:**
-    ```json
-    {
-      "query": "What are the rules regarding hybrid and remote work?",
-      "answer": "According to the Work-Life Balance Guidelines:\n- Remote work: Full-time employees are eligible for hybrid work, allowing up to 2 days of remote work per week, subject to team performance and manager approval.",
-      "source": "Local Fallback Generator (No API Key)"
-    }
-    ```
+  ]
+}
+```
 
 ---
 
-## 🔍 RAG Vector Search & Fallback Engine (Step 7)
+## 2. POST /health-score
 
-To lookup company HR policies, the system utilizes a Retrieval-Augmented Generation (RAG) pipeline:
-1.  **Parsing & Chunking:** The [hr_policies.txt](file:///c:/Users/anil5/Desktop/New%20folder/docs/hr_policies.txt) handbook is split into sections based on topics (Training, Work-Life, Promotions, Retention).
-2.  **Indexing:** Uses a **TF-IDF Vectorizer** (from `scikit-learn`) to transform policy chunks into sparse vectors.
-3.  **Retrieval:** Computes **Cosine Similarity** between the TF-IDF representation of the user query and the policy database to return the top 2 matching chunks.
-4.  **Generative Fallback Design:**
-    *   If `OPENAI_API_KEY` is present, it formats the context and queries a GPT completions model to generate a natural answer.
-    *   If the key is missing or calls fail (e.g. **Error code: 429** due to exhausted balance), the query is routed to a rule-based query parser that extracts the relevant text, ensuring the application remains robust.
+This endpoint calculates the workforce health score and returns its category.
+
+### Request Example
+
+```json
+{
+  "JobSatisfaction": 3,
+  "TrainingTimesLastYear": 2,
+  "PerformanceRating": 4,
+  "WorkLifeBalance": 2
+}
+```
+
+### Response Example
+
+```json
+{
+  "health_score_raw": 2.8,
+  "health_score": 60.0,
+  "category": "Moderate"
+}
+```
 
 ---
 
-## 🤖 Agentic Weekly Automation (Step 8)
+## 3. POST /query
 
-The weekly scanner run-loop is triggered via `scripts/run_agent.py`. It:
-1.  Loads the preprocessed Excel database.
-2.  Scales features and runs predictions for all employees.
-3.  Identifies high-risk employees (attrition probability >= 50%).
-4.  Collects active skill-gaps and promotion candidates.
-5.  Generates a detailed summary saved to [weekly_report_latest.md](file:///c:/Users/anil5/Desktop/New%20folder/reports/weekly_report_latest.md).
+This endpoint uses the RAG system to answer questions related to company HR policies.
+
+### Request Example
+
+```json
+{
+  "query": "What are the rules regarding hybrid and remote work?"
+}
+```
+
+### Response Example
+
+```json
+{
+  "query": "What are the rules regarding hybrid and remote work?",
+  "answer": "According to the Work-Life Balance Guidelines:\n- Remote work: Full-time employees are eligible for hybrid work, allowing up to 2 days of remote work per week, subject to team performance and manager approval.",
+  "source": "Local Fallback Generator (No API Key)"
+}
+```
 
 ---
 
-## ⚙️ Setup & Execution Guide
+# RAG Vector Search & Fallback Engine
 
-### Installation
-Ensure you have Python 3.10+ installed and install the required dependencies:
+The system uses a Retrieval-Augmented Generation pipeline to search and retrieve information from company HR policies.
+
+## Step 1: Parsing & Chunking
+
+The `hr_policies.txt` handbook is divided into different sections based on topics such as:
+
+* Training
+* Work-Life
+* Promotions
+* Retention
+
+---
+
+## Step 2: Indexing
+
+The system uses a `TF-IDF Vectorizer` from `scikit-learn`.
+
+The policy sections are converted into sparse vectors that can be compared with user queries.
+
+---
+
+## Step 3: Retrieval
+
+The system calculates Cosine Similarity between:
+
+* The user query
+* The stored policy vectors
+
+The top 2 most relevant policy sections are retrieved.
+
+---
+
+## Step 4: Generative Fallback Design
+
+If `OPENAI_API_KEY` is available:
+
+1. The system collects the relevant policy context.
+2. The context is sent to a GPT completions model.
+3. A natural language answer is generated.
+
+If the API key is missing or an API call fails, such as an Error 429 due to exhausted balance:
+
+1. The system uses the local rule-based query parser.
+2. Relevant policy text is extracted.
+3. The application continues to provide answers without depending completely on the API.
+
+---
+
+# Agentic Weekly Automation
+
+The weekly scanner is executed through:
+
+```bash
+python scripts/run_agent.py
+```
+
+The scanner performs the following steps:
+
+### Step 1: Load Employee Data
+
+The system loads the preprocessed Excel dataset.
+
+### Step 2: Run Predictions
+
+The required features are scaled and predictions are generated for all employees.
+
+### Step 3: Identify High-Risk Employees
+
+Employees with an attrition probability of `50%` or higher are identified as high-risk employees.
+
+### Step 4: Collect Workforce Insights
+
+The system collects:
+
+* Active skill-gap employees
+* Promotion-ready employees
+* High-risk employees
+
+### Step 5: Generate Weekly Report
+
+A detailed summary report is generated and saved as:
+
+```text
+reports/weekly_report_latest.md
+```
+
+---
+
+# Setup & Execution Guide
+
+Follow the steps below to install and run the complete system.
+
+## Step 1: Install Python
+
+Ensure that Python version `3.10` or higher is installed.
+
+Check the version using:
+
+```bash
+python --version
+```
+
+---
+
+## Step 2: Open the Project Folder
+
+Open Command Prompt or PowerShell and navigate to your project directory:
+
+```powershell
+cd "c:\Users\anil5\Desktop\New folder"
+```
+
+---
+
+## Step 3: Install Required Dependencies
+
+Run the following command:
+
 ```bash
 pip install pandas openpyxl scikit-learn xgboost joblib fastapi uvicorn httpx python-dotenv
 ```
 
-### Running Commands
-*   **Run Weekly Agent Scanner:**
-    ```bash
-    python scripts/run_agent.py
-    ```
-*   **Start Local FastAPI Development Server:**
-    ```bash
-    uvicorn app.main:app --reload
-    ```
-*   **Run Integration Tests:**
-    ```bash
-    python tests/test_api.py
-    ```
+Wait for all dependencies to install successfully.
+
+---
+
+## Step 4: Run the Weekly Agent Scanner
+
+Use the following command:
+
+```bash
+python scripts/run_agent.py
+```https://github.com/aishwaryauggi-collab/Creation-of-Workforce-Insights-Dashboard-for-Employee-Skill-and-Analytics/blob/main/ml/README.md
+
+This scans employee data, predicts attrition risk, identifies skill gaps and promotion candidates, and generates the latest workforce report.
+
+---
+
+## Step 5: Start the FastAPI Server
+
+Run:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+After the server starts, open:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+This opens the FastAPI interactive documentation where all API endpoints can be tested.
+
+---
+
+## Step 6: Run Integration Tests
+
+Run:
+
+```bash
+python tests/test_api.py
+```
+
+This validates the main API endpoints and checks whether the system components are working correctly.
