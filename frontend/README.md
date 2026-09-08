@@ -1,4 +1,4 @@
-```markdown
+
 # Workforce Insights Dashboard
 
 A React-based workforce analytics dashboard for exploring employee performance, attrition risk, workforce health, skill gaps, promotion readiness, and HR policies.
