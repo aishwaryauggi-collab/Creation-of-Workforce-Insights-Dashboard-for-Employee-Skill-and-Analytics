@@ -6,7 +6,8 @@ import OverviewPage from './pages/OverviewPage'
 import AiAssistantPage from './pages/AiAssistantPage'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
-
+import { RequireRole } from './components/RequireRole';
+import { ROUTE_PERMISSIONS } from './rbacRules';
 function App() {
   return (
     <AuthProvider>
@@ -16,10 +17,38 @@ function App() {
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route element={<ProtectedLayout />}>
             <Route path="/dashboard" element={<OverviewRoute />} />
-            <Route path="/retention" element={<PlaceholderPage title="Attrition & Retention" />} />
-            <Route path="/performance" element={<PlaceholderPage title="Employee & Performance" />} />
-            <Route path="/dei" element={<PlaceholderPage title="Diversity, Equity & Inclusion" />} />
-            <Route path="/recruitment" element={<PlaceholderPage title="Recruitment & Talent Flow" />} />
+            <Route
+              path="/retention"
+              element={
+                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/retention']}>
+                  <PlaceholderPage title="Attrition & Retention" />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/performance"
+              element={
+                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/performance']}>
+                  <PlaceholderPage title="Employee & Performance" />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/dei"
+              element={
+                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/dei']}>
+                  <PlaceholderPage title="Diversity, Equity & Inclusion" />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/recruitment"
+              element={
+                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/recruitment']}>
+                  <PlaceholderPage title="Recruitment & Talent Flow" />
+                </RequireRole>
+              }
+            />
             <Route path="/ai-assistant" element={<AiAssistantPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
