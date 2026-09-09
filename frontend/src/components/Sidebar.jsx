@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-
+import { hasPermission, ROUTE_PERMISSIONS } from '../rbacRules';
 const links = [
   { label: 'Workforce Overview', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Attrition & Retention', to: '/retention', icon: UserMinus },
@@ -21,7 +21,9 @@ const links = [
 
 function Sidebar() {
   const { user } = useAuth()
-
+const visibleLinks = links.filter(link => 
+    hasPermission(user?.role, ROUTE_PERMISSIONS[link.to])
+  );
   return (
     <aside className="flex w-full shrink-0 flex-col bg-slate-900 text-slate-300 lg:fixed lg:inset-y-0 lg:left-0 lg:w-72">
       <div className="flex items-center gap-3 border-b border-slate-800 px-6 py-6">
@@ -33,7 +35,7 @@ function Sidebar() {
       </div>
 
       <nav aria-label="Primary navigation" className="grid grid-cols-2 gap-1 px-3 py-5 sm:grid-cols-3 lg:block lg:flex-1 lg:space-y-1 lg:px-4">
-        {links.map(({ label, to, icon: Icon }) => (
+        {visibleLinks.map(({ label, to, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
