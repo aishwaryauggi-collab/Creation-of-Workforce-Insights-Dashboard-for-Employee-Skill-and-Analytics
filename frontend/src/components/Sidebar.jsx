@@ -26,7 +26,7 @@ const visibleLinks = links.filter(link =>
   );
   return (
     <aside className="flex w-full shrink-0 flex-col bg-slate-900 text-slate-300 lg:fixed lg:inset-y-0 lg:left-0 lg:w-72">
-      <div className="flex items-center gap-3 border-b border-slate-800 px-6 py-6">
+      <div className="flex items-center gap-3 border-b border-slate-800 px-4 py-4 sm:px-6 sm:py-6">
         <div className="grid size-10 place-items-center rounded-lg bg-blue-600 text-xl font-bold text-white shadow-lg shadow-blue-950/40">W</div>
         <div>
           <p className="text-sm font-bold tracking-[0.12em] text-white">WORKFORCE HUB</p>
@@ -34,7 +34,7 @@ const visibleLinks = links.filter(link =>
         </div>
       </div>
 
-      <nav aria-label="Primary navigation" className="grid grid-cols-2 gap-1 px-3 py-5 sm:grid-cols-3 lg:block lg:flex-1 lg:space-y-1 lg:px-4">
+      <nav aria-label="Primary navigation" className="grid max-h-36 grid-cols-2 gap-1 overflow-y-auto px-3 py-3 sm:max-h-40 sm:grid-cols-3 lg:block lg:max-h-none lg:flex-1 lg:space-y-1 lg:overflow-visible lg:px-4 lg:py-5">
         {visibleLinks.map(({ label, to, icon: Icon }) => (
           <NavLink
             key={to}
@@ -47,7 +47,7 @@ const visibleLinks = links.filter(link =>
         ))}
       </nav>
 
-      <div className="border-t border-slate-800 px-6 py-5">
+      <div className="hidden border-t border-slate-800 px-6 py-5 lg:block">
         <div className="flex items-center gap-3">
           <ShieldCheck size={18} className="shrink-0 text-blue-400" />
           <div className="min-w-0">

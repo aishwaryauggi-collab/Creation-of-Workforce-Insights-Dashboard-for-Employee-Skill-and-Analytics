@@ -13,8 +13,7 @@ import {
   Sparkles,
   User,
 } from 'lucide-react'
-
-const API_URL = 'http://127.0.0.1:8000'
+import { getApiUrl, queryHrPolicies } from '../api'
 
 const suggestedPrompts = [
   'What are the rules regarding hybrid and remote work?',
@@ -54,7 +53,7 @@ function AiAssistantPage() {
 
   useEffect(() => {
     let isMounted = true
-    fetch(`${API_URL}/`)
+    fetch(`${getApiUrl()}/`)
       .then((response) => {
         if (!response.ok) throw new Error('FastAPI health check failed')
         if (isMounted) setApiStatus('connected')
@@ -74,13 +73,7 @@ function AiAssistantPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${API_URL}/query`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: trimmedQuery }),
-      })
-      if (!response.ok) throw new Error(`RAG query failed with status ${response.status}`)
-      const result = await response.json()
+      const result = await queryHrPolicies(trimmedQuery)
       setApiStatus(result.source?.toLowerCase().includes('fallback') ? 'fallback' : 'connected')
       setMessages((current) => [...current, {
         role: 'assistant',

@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import LoginPage from './pages/LoginPage'
 import OverviewPage from './pages/OverviewPage'
 import AiAssistantPage from './pages/AiAssistantPage'
+import RetentionPage from './pages/RetentionPage'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import { RequireRole } from './components/RequireRole';
@@ -21,7 +22,7 @@ function App() {
               path="/retention"
               element={
                 <RequireRole allowedRoles={ROUTE_PERMISSIONS['/retention']}>
-                  <PlaceholderPage title="Attrition & Retention" />
+                  <RetentionPage />
                 </RequireRole>
               }
             />

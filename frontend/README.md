@@ -1,4 +1,3 @@
-
 # Workforce Insights Dashboard
 
 A React-based workforce analytics dashboard for exploring employee performance, attrition risk, workforce health, skill gaps, promotion readiness, and HR policies.
@@ -43,9 +42,11 @@ frontend/
 │   ├── pages/
 │   │   ├── `AiAssistantPage.jsx`
 │   │   ├── LoginPage.jsx
-│   │   └── OverviewPage.jsx
+│   │   ├── OverviewPage.jsx
+│   │   └── RetentionPage.jsx
 │   ├── `App.jsx`
 │   ├── App.css
+│   ├── `api.js`
 │   ├── index.css
 │   └── main.jsx
 ├── index.html
@@ -139,25 +140,31 @@ http://127.0.0.1:8000/docs
 
 The frontend uses these backend endpoints:
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/` | Checks whether the backend is online |
-| `POST` | `/query` | Sends HR policy questions to the RAG assistant |
-| `POST` | `/health-score` | Calculates a workforce health score |
-| `POST` | `/predict-attrition` | Predicts employee attrition risk |
+| Method | Endpoint             | Purpose                                        |
+| ------ | -------------------- | ---------------------------------------------- |
+| `GET`  | `/`                  | Checks whether the backend is online           |
+| `POST` | `/query`             | Sends HR policy questions to the RAG assistant |
+| `POST` | `/health-score`      | Calculates a workforce health score            |
+| `POST` | `/predict-attrition` | Predicts employee attrition risk               |
 
-If the backend is unavailable, the AI Assistant displays an offline fallback message.
+The API client defaults to `http://127.0.0.1:8000`. To use another backend URL, create `frontend/.env.local`:
+
+```text
+VITE_API_URL=http://localhost:8000
+```
+
+The `/retention` page submits employee profile fields to `/predict-attrition` and workforce indicators to `/health-score`, then displays the returned risk category, probabilities, health category, and model drivers. If the backend is unavailable, the assistant displays an offline fallback message and the retention page displays the request error.
 
 ## Application Routes
 
-| Route | Description |
-|---|---|
-| `/` | Login page |
-| `/dashboard` | Workforce overview |
-| `/retention` | Attrition and retention workspace |
-| `/performance` | Employee performance workspace |
-| `/dei` | Diversity, Equity, and Inclusion workspace |
-| `/recruitment` | Recruitment and talent flow workspace |
+| Route           | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `/`             | Login page                                     |
+| `/dashboard`    | Workforce overview                             |
+| `/retention`    | Attrition and retention workspace              |
+| `/performance`  | Employee performance workspace                 |
+| `/dei`          | Diversity, Equity, and Inclusion workspace     |
+| `/recruitment`  | Recruitment and talent flow workspace          |
 | `/ai-assistant` | HR policy and workforce intelligence assistant |
 
 ## Demo Login
