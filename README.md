@@ -187,7 +187,7 @@ This validates the major components and API functionality of the project.
 
 
 
-# 📊 Milestone 3: Workforce Intelligence Dashboard
+# Milestone 3: Workforce Intelligence Dashboard
 
 Develop an interactive Workforce Insights Dashboard to analyze employee data, workforce trends, attrition risk, diversity metrics, and employee health indicators.
 
