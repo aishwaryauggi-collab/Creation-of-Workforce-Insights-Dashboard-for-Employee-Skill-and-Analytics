@@ -206,16 +206,16 @@ Develop an interactive Workforce Insights Dashboard to analyze employee data, wo
 
 ## Dashboard Setup
 
-### Step 1: Open the Dashboard
+### Step 1: Open the Dashboard 
 
 Open the Power BI dashboard file:
 
-```text
+
 WorkForce_Dashboard.pbix
 
 Open the file using Microsoft Power BI Desktop.
 
-Step 2: Workforce Overview
+### Step 2: Workforce Overview
 
 The Overview page provides key workforce metrics including:
 
@@ -227,7 +227,7 @@ Average Monthly Income: approximately $6.5K
 
 The page also includes visualizations for department, job role, gender, and employee tenure.
 
-Step 3: Predictive Insights
+### Step 3: Predictive Insights
 
 The Predictive Insights page displays ML-based attrition risk.
 
@@ -247,7 +247,7 @@ Health Score Distribution
 
 The Average Risk Score uses a 0–1 probability scale, while the Health Score uses a 0–100 scale.
 
-Step 4: Interactive Filters
+### Step 4: Interactive Filters
 
 The dashboard provides filters for:
 
@@ -261,7 +261,7 @@ These filters allow users to analyze specific employee groups.
 
 Department and Gender filters are synchronized across the dashboard pages.
 
-Step 5: Dashboard Validation
+### Step 5: Dashboard Validation
 
 The dashboard metrics are validated for consistency.
 
