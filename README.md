@@ -206,7 +206,7 @@ Develop an interactive Workforce Insights Dashboard to analyze employee data, wo
 
 
 ## Step-by-Step Setup
----
+
 ### Step 1: Open the Dashboard 
 
 Open the Power BI dashboard file:
@@ -278,3 +278,183 @@ High-Risk Employees by Department
 Employees by Department
 
 961 + 446 + 63 = 1,470
+
+---
+
+
+## Milestone 4: Frontend Dashboard – Workforce Insights Application
+
+A React-based dashboard for exploring workforce analytics, employee performance, attrition risk, workforce health, diversity, recruitment, and HR policies.
+
+## Frontend Features
+
+* Workforce overview and analytics
+* Department and timeframe filters
+* Attrition and retention analysis
+* Employee performance analysis
+* Diversity and recruitment analysis
+* AI-powered HR Policy Assistant
+* RAG-based HR policy search
+* Employee attrition prediction
+* Workforce health score
+* Responsive dashboard layout
+
+---
+
+## Prerequisites
+
+* Node.js 18 or newer
+* npm
+* Python 3.10 or newer
+* FastAPI backend
+
+Check Node.js and npm:
+
+```bash
+node --version
+npm --version
+````
+
+---
+
+## Step-by-Step Setup
+
+## Step 1: Open Frontend
+---
+```bash
+cd frontend
+```
+
+## Step 2: Install Dependencies
+---
+```bash
+npm install
+```
+
+## Step 3: Start Frontend
+---
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+## Step 4: Start Backend
+---
+Open another terminal:
+
+```bash
+cd ml
+uvicorn app.main:app --reload
+```
+
+Backend:
+
+```text
+http://127.0.0.1:8000
+```
+
+API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Step 5: Configure API URL
+---
+Create:
+
+```text
+frontend/.env.local
+```
+
+Add:
+
+```text
+VITE_API_URL=http://localhost:8000
+```
+
+## Step 6: Access Dashboard
+---
+Open:
+
+```text
+http://localhost:5173
+```
+
+Login to access the workforce dashboard.
+
+---
+
+## Dashboard Modules
+
+* **Workforce Overview** – KPIs, departments, filters, and workforce analysis
+* **Retention** – Attrition risk and employee retention analysis
+* **Performance** – Employee performance insights
+* **DEI** – Diversity, Equity, and Inclusion analysis
+* **Recruitment** – Recruitment and talent flow analysis
+* **AI Assistant** – HR policy questions using RAG
+* **Health Score** – Workforce health indicators
+
+---
+
+## Application Routes
+
+| Route           | Description             |
+| --------------- | ----------------------- |
+| `/`             | Login                   |
+| `/dashboard`    | Workforce overview      |
+| `/retention`    | Attrition and retention |
+| `/performance`  | Employee performance    |
+| `/dei`          | Diversity and Inclusion |
+| `/recruitment`  | Recruitment analysis    |
+| `/ai-assistant` | HR Policy Assistant     |
+
+---
+
+## Backend API Integration
+
+| Method | Endpoint             | Purpose                |
+| ------ | -------------------- | ---------------------- |
+| GET    | `/`                  | Backend status         |
+| POST   | `/query`             | HR policy RAG          |
+| POST   | `/health-score`      | Workforce health score |
+| POST   | `/predict-attrition` | Attrition prediction   |
+
+---
+
+## Frontend Technology Stack
+
+* React
+* Vite
+* React Router
+* Tailwind CSS
+* FastAPI
+* Python
+* Machine Learning
+
+---
+
+## Frontend Validation
+
+Run:
+
+```bash
+npm run lint
+npm run build
+```
+
+Both commands should complete successfully without errors.
+
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+```
