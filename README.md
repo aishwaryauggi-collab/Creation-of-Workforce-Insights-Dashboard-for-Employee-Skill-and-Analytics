@@ -184,3 +184,93 @@ python tests/test_api.py
 ```
 
 This validates the major components and API functionality of the project.
+
+
+
+# Milestone 3: Workforce Intelligence Dashboard
+
+Develop an interactive Workforce Insights Dashboard to analyze employee data, workforce trends, attrition risk, diversity metrics, and employee health indicators.
+
+## Dashboard Features
+
+* Workforce headcount and department analysis
+* Diversity and employee demographic metrics
+* Attrition and job-role analysis
+* ML-based employee attrition risk analysis
+* Employee health score analysis
+* Interactive filters and slicers
+* KPI-based workforce insights
+* Executive workforce summaries
+
+---
+
+## Dashboard Setup
+
+### Step 1: Open the Dashboard 
+
+Open the Power BI dashboard file:
+
+
+WorkForce_Dashboard.pbix
+
+Open the file using Microsoft Power BI Desktop.
+
+### Step 2: Workforce Overview
+
+The Overview page provides key workforce metrics including:
+
+Total Employees: 1,470
+Employees Left: 237
+Attrition Rate: 16.1%
+High-Risk Employees: 428
+Average Monthly Income: approximately $6.5K
+
+The page also includes visualizations for department, job role, gender, and employee tenure.
+
+### Step 3: Predictive Insights
+
+The Predictive Insights page displays ML-based attrition risk.
+
+Employees are classified into:
+
+High Risk: 428
+Medium Risk: 252
+Low Risk: 790
+
+The page also includes:
+
+Average Risk Score
+Risk Score Distribution
+High-Risk Employees by Department
+Employee Health Score
+Health Score Distribution
+
+The Average Risk Score uses a 0–1 probability scale, while the Health Score uses a 0–100 scale.
+
+### Step 4: Interactive Filters
+
+The dashboard provides filters for:
+
+Department
+Job Role
+Age Group
+Gender
+OverTime
+
+These filters allow users to analyze specific employee groups.
+
+Department and Gender filters are synchronized across the dashboard pages.
+
+### Step 5: Dashboard Validation
+
+The dashboard metrics are validated for consistency.
+
+High Risk + Medium Risk + Low Risk = Total Employees
+
+428 + 252 + 790 = 1,470
+High-Risk Employees by Department
+
+228 + 182 + 18 = 428
+Employees by Department
+
+961 + 446 + 63 = 1,470
