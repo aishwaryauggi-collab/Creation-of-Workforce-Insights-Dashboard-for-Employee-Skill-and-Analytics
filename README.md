@@ -281,167 +281,110 @@ Employees by Department
 
 ---
 
+# Milestone 4: Frontend Dashboard – Workforce Insights Application
 
-## Milestone 4: Frontend Dashboard – Workforce Insights Application
-
-A React-based dashboard for exploring workforce analytics, employee performance, attrition risk, workforce health, diversity, recruitment, and HR policies.
+Develop a React-based Workforce Insights Dashboard to provide interactive workforce analytics, employee performance, attrition risk, workforce health, diversity, recruitment, and HR policy insights.
 
 ## Frontend Features
 
-* Workforce overview and analytics
-* Department and timeframe filters
+* Workforce overview and department analysis
 * Attrition and retention analysis
-* Employee performance analysis
-* Diversity and recruitment analysis
+* ML-based attrition risk analysis
+* Employee health score analysis
+* Performance, diversity, and recruitment insights
 * AI-powered HR Policy Assistant
 * RAG-based HR policy search
-* Employee attrition prediction
-* Workforce health score
+* Interactive filters and cross-filtering
 * Responsive dashboard layout
-
----
-
-## Prerequisites
-
-* Node.js 18 or newer
-* npm
-* Python 3.10 or newer
-* FastAPI backend
-
-Check Node.js and npm:
-
-```bash
-node --version
-npm --version
-````
 
 ---
 
 ## Step-by-Step Setup
 
-## Step 1: Open Frontend
----
+### Step 1: Open the Frontend
+
+Open the terminal in the project folder and run:
+
 ```bash
 cd frontend
-```
+````
 
-## Step 2: Install Dependencies
 ---
+
+### Step 2: Install Dependencies
+
+Install the required React packages:
+
 ```bash
 npm install
 ```
 
-## Step 3: Start Frontend
 ---
+
+### Step 3: Start the Frontend
+
+Run the development server:
+
 ```bash
 npm run dev
 ```
 
-Open:
+Open the URL shown in the terminal. The default address is:
 
 ```text
 http://localhost:5173
 ```
 
-## Step 4: Start Backend
 ---
-Open another terminal:
+
+### Step 4: Start the Backend
+
+Open another terminal and run:
 
 ```bash
 cd ml
 uvicorn app.main:app --reload
 ```
 
-Backend:
+The backend runs at:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-API documentation:
+---
+
+### Step 5: Dashboard Modules
+
+The frontend provides:
+
+* Workforce Overview
+* Attrition and Retention
+* Predictive Insights
+* Employee Performance
+* Diversity and Inclusion
+* Recruitment
+* AI HR Policy Assistant
+
+---
+
+### Step 6: Backend Integration
+
+The frontend connects with FastAPI through:
 
 ```text
-http://127.0.0.1:8000/docs
+/query
+/health-score
+/predict-attrition
 ```
 
-## Step 5: Configure API URL
----
-Create:
-
-```text
-frontend/.env.local
-```
-
-Add:
-
-```text
-VITE_API_URL=http://localhost:8000
-```
-
-## Step 6: Access Dashboard
----
-Open:
-
-```text
-http://localhost:5173
-```
-
-Login to access the workforce dashboard.
+These services support HR policy queries, workforce health scores, and employee attrition predictions.
 
 ---
 
-## Dashboard Modules
+### Step 7: Frontend Validation
 
-* **Workforce Overview** – KPIs, departments, filters, and workforce analysis
-* **Retention** – Attrition risk and employee retention analysis
-* **Performance** – Employee performance insights
-* **DEI** – Diversity, Equity, and Inclusion analysis
-* **Recruitment** – Recruitment and talent flow analysis
-* **AI Assistant** – HR policy questions using RAG
-* **Health Score** – Workforce health indicators
-
----
-
-## Application Routes
-
-| Route           | Description             |
-| --------------- | ----------------------- |
-| `/`             | Login                   |
-| `/dashboard`    | Workforce overview      |
-| `/retention`    | Attrition and retention |
-| `/performance`  | Employee performance    |
-| `/dei`          | Diversity and Inclusion |
-| `/recruitment`  | Recruitment analysis    |
-| `/ai-assistant` | HR Policy Assistant     |
-
----
-
-## Backend API Integration
-
-| Method | Endpoint             | Purpose                |
-| ------ | -------------------- | ---------------------- |
-| GET    | `/`                  | Backend status         |
-| POST   | `/query`             | HR policy RAG          |
-| POST   | `/health-score`      | Workforce health score |
-| POST   | `/predict-attrition` | Attrition prediction   |
-
----
-
-## Frontend Technology Stack
-
-* React
-* Vite
-* React Router
-* Tailwind CSS
-* FastAPI
-* Python
-* Machine Learning
-
----
-
-## Frontend Validation
-
-Run:
+Run the following commands before submission:
 
 ```bash
 npm run lint
@@ -450,11 +393,4 @@ npm run build
 
 Both commands should complete successfully without errors.
 
-## Available Scripts
-
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
-```
+---
