@@ -1,3 +1,4 @@
+import asyncio
 import os
 import re
 from typing import Dict, Any, List
@@ -168,35 +169,40 @@ class SimpleRAG:
             
         context_contents = [chunk["content"] for chunk in retrieved]
         
-        # Check for OpenAI API key
-        api_key = os.environ.get("OPENAI_API_KEY")
+        # Check for Gemini API key
+        api_key = os.environ.get("GEMINI_API_KEY")
         if api_key:
             try:
-                from openai import OpenAI
-                client = OpenAI(api_key=api_key)
-                
-                system_prompt = (
-                    "You are a helpful HR Assistant. Answer the user's question accurately based "
-                    "ONLY on the provided HR policy context. If the answer is not in the context, "
-                    "say you don't know."
-                )
-                
+                from google import genai
+
                 context_str = "\n\n=== CONTEXT ===\n" + "\n\n".join(context_contents)
-                
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": f"{context_str}\n\nQuestion: {user_query}"}
-                    ],
-                    max_tokens=250,
-                    temperature=0.2
-                )
-                answer = response.choices[0].message.content.strip()
-                source = "OpenAI GPT model"
+
+                async def generate_response():
+                    client = genai.Client(api_key=api_key)
+                    return await client.aio.models.generate_content(
+                        model="gemini-2.5-flash",
+                        contents=f"""
+{context_str}
+
+Question: {user_query}
+""",
+                        config={
+                            "system_instruction": (
+                                "You are a helpful HR Assistant. Answer only from the "
+                                "provided HR policy context. If the answer is unavailable, say so."
+                            ),
+                            "temperature": 0.2,
+                            "max_output_tokens": 250,
+                        },
+                    )
+
+                response = asyncio.run(generate_response())
+
+                answer = response.text.strip()
+                source = "Google Gemini model"
             except Exception as e:
                 answer = self.generate_fallback_answer(user_query, context_contents)
-                source = f"Local Fallback Generator (OpenAI failed: {e})"
+                source = f"Local Fallback Generator (Gemini failed: {e})"
         else:
             answer = self.generate_fallback_answer(user_query, context_contents)
             source = "Local Fallback Generator (No API Key)"

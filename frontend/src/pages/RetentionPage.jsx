@@ -19,7 +19,7 @@ const initialHealth = {
   WorkLifeBalance: 2,
 }
 
-function RetentionPage() {
+function RetentionPage({ title = 'Attrition & Retention', eyebrow = 'Predictive retention workspace', description = 'Submit an employee profile to score attrition risk and review the workforce health signal.' }) {
   const [profile, setProfile] = useState(initialProfile)
   const [healthInputs, setHealthInputs] = useState(initialHealth)
   const [prediction, setPrediction] = useState(null)
@@ -55,9 +55,9 @@ function RetentionPage() {
   return (
     <main className="mx-auto max-w-[1600px] space-y-8 p-5 sm:p-8 lg:p-10">
       <header>
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Predictive retention workspace</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-slate-950">Attrition &amp; Retention</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-500">Submit an employee profile to score attrition risk and review the workforce health signal.</p>
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">{eyebrow}</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-slate-950">{title}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-slate-500">{description}</p>
       </header>
 
       {error && <div role="alert" className="flex items-start gap-3 rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"><AlertTriangle size={18} className="mt-0.5 shrink-0" />{error}</div>}

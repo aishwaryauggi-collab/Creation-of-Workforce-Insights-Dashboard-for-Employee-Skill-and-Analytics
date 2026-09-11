@@ -1,11 +1,9 @@
 import {
-  BarChart3,
   BotMessageSquare,
-  Briefcase,
+  BrainCircuit,
   LayoutDashboard,
   ShieldCheck,
   UserMinus,
-  Users,
 } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -13,9 +11,7 @@ import { hasPermission, ROUTE_PERMISSIONS } from '../rbacRules';
 const links = [
   { label: 'Workforce Overview', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Attrition & Retention', to: '/retention', icon: UserMinus },
-  { label: 'Employee & Performance', to: '/performance', icon: BarChart3 },
-  { label: 'Diversity, Equity & Inclusion', to: '/dei', icon: Users },
-  { label: 'Recruitment & Talent Flow', to: '/recruitment', icon: Briefcase },
+  { label: 'Predictive Insights', to: '/predictive-insights', icon: BrainCircuit },
   { label: 'AI HR Assistant (RAG)', to: '/ai-assistant', icon: BotMessageSquare },
 ]
 

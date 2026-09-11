@@ -8,9 +8,7 @@ export const ROLES = {
 export const ROUTE_PERMISSIONS = {
   '/dashboard': [ROLES.ADMIN, ROLES.HR_LEADER, ROLES.STAKEHOLDER, ROLES.EXECUTIVE],
   '/retention': [ROLES.ADMIN, ROLES.HR_LEADER, ROLES.EXECUTIVE],
-  '/performance': [ROLES.ADMIN, ROLES.HR_LEADER, ROLES.EXECUTIVE],
-  '/dei': [ROLES.ADMIN, ROLES.HR_LEADER],
-  '/recruitment': [ROLES.ADMIN, ROLES.HR_LEADER],
+  '/predictive-insights': [ROLES.ADMIN, ROLES.HR_LEADER, ROLES.STAKEHOLDER, ROLES.EXECUTIVE],
   '/ai-assistant': [ROLES.ADMIN, ROLES.HR_LEADER, ROLES.STAKEHOLDER, ROLES.EXECUTIVE],
 };
 export const hasPermission = (userRole, allowedRoles = []) => {

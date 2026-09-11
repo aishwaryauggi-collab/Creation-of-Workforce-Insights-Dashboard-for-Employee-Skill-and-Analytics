@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import OverviewPage from './pages/OverviewPage'
 import AiAssistantPage from './pages/AiAssistantPage'
 import RetentionPage from './pages/RetentionPage'
+import PredictiveInsightsPage from './pages/PredictiveInsightsPage'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import { RequireRole } from './components/RequireRole';
@@ -27,26 +28,10 @@ function App() {
               }
             />
             <Route
-              path="/performance"
+              path="/predictive-insights"
               element={
-                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/performance']}>
-                  <PlaceholderPage title="Employee & Performance" />
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/dei"
-              element={
-                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/dei']}>
-                  <PlaceholderPage title="Diversity, Equity & Inclusion" />
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/recruitment"
-              element={
-                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/recruitment']}>
-                  <PlaceholderPage title="Recruitment & Talent Flow" />
+                <RequireRole allowedRoles={ROUTE_PERMISSIONS['/predictive-insights']}>
+                  <PredictiveInsightsPage />
                 </RequireRole>
               }
             />
@@ -81,16 +66,6 @@ function ProtectedLayout() {
 function OverviewRoute() {
   const { filters } = useOutletContext()
   return <OverviewPage filters={filters} />
-}
-
-function PlaceholderPage({ title }) {
-  return (
-    <div className="mx-auto max-w-[1600px] p-5 sm:p-8 lg:p-10">
-      <div className="grid min-h-[calc(100vh-160px)] place-items-center rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
-        <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Workforce Hub</p><h1 className="mt-3 text-3xl font-semibold text-slate-900">{title}</h1><p className="mt-2 text-sm text-slate-500">This workspace is ready for its analytics module.</p></div>
-      </div>
-    </div>
-  )
 }
 
 export default App

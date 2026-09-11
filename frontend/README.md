@@ -8,11 +8,11 @@ A React-based workforce analytics dashboard for exploring employee performance, 
 - Workforce overview dashboard
 - Department and timeframe filters
 - Attrition and retention workspace
-- Employee performance workspace
-- Diversity, Equity, and Inclusion workspace
-- Recruitment and talent flow workspace
+- Predictive Insights dashboard with ML attrition and employee health visualizations
+- Cross-filtering by department and risk category with filter reset controls
+- Employee performance, DEI, and recruitment workspaces
 - AI-powered HR Policy Assistant
-- RAG-based policy search through the FastAPI backend
+- Gemini-backed RAG policy search through the FastAPI backend
 - Responsive desktop and mobile layout
 
 ## Technology Stack
@@ -22,6 +22,7 @@ A React-based workforce analytics dashboard for exploring employee performance, 
 - React Router
 - Tailwind CSS
 - Lucide React
+- Recharts
 - ESLint
 - FastAPI backend integration
 
@@ -43,6 +44,7 @@ frontend/
 │   │   ├── `AiAssistantPage.jsx`
 │   │   ├── LoginPage.jsx
 │   │   ├── OverviewPage.jsx
+│   │   ├── `PredictiveInsightsPage.jsx`
 │   │   └── RetentionPage.jsx
 │   ├── `App.jsx`
 │   ├── App.css
@@ -147,25 +149,44 @@ The frontend uses these backend endpoints:
 | `POST` | `/health-score`      | Calculates a workforce health score            |
 | `POST` | `/predict-attrition` | Predicts employee attrition risk               |
 
+The AI Assistant sends policy questions to `/query`. The FastAPI RAG service retrieves relevant sections from `ml/docs/hr_policies.txt` using TF-IDF and cosine similarity, then uses Google Gemini (`gemini-2.5-flash`) to generate a grounded answer when `GEMINI_API_KEY` is configured. The backend uses a local policy fallback if Gemini is unavailable. The Gemini key must never be placed in the frontend environment or bundled into the browser application.
+
 The API client defaults to `http://127.0.0.1:8000`. To use another backend URL, create `frontend/.env.local`:
 
 ```text
 VITE_API_URL=http://localhost:8000
 ```
 
+The `/predictive-insights` page is a client-side Power BI-style dashboard. It displays ML attrition-risk KPIs, department and job-role charts, risk distributions, employee health scores, and cross-filter interactions. Selecting a department or risk category updates the visible metrics and charts; the active filter can be cleared with `Reset Filters`.
+
 The `/retention` page submits employee profile fields to `/predict-attrition` and workforce indicators to `/health-score`, then displays the returned risk category, probabilities, health category, and model drivers. If the backend is unavailable, the assistant displays an offline fallback message and the retention page displays the request error.
+
+### Gemini configuration
+
+Gemini is configured in the backend, not in this React application. From the repository root, install the backend SDK and add the key to `ml/.env`:
+
+```bash
+pip install google-genai
+```
+
+```text
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+Restart FastAPI after changing the environment file. The frontend only needs the backend URL configured through `frontend/.env.local`.
 
 ## Application Routes
 
-| Route           | Description                                    |
-| --------------- | ---------------------------------------------- |
-| `/`             | Login page                                     |
-| `/dashboard`    | Workforce overview                             |
-| `/retention`    | Attrition and retention workspace              |
-| `/performance`  | Employee performance workspace                 |
-| `/dei`          | Diversity, Equity, and Inclusion workspace     |
-| `/recruitment`  | Recruitment and talent flow workspace          |
-| `/ai-assistant` | HR policy and workforce intelligence assistant |
+| Route                  | Description                                    |
+| ---------------------- | ---------------------------------------------- |
+| `/`                    | Login page                                     |
+| `/dashboard`           | Workforce overview                             |
+| `/retention`           | Attrition and retention workspace              |
+| `/predictive-insights` | ML predictions and employee health dashboard   |
+| `/performance`         | Employee performance workspace                 |
+| `/dei`                 | Diversity, Equity, and Inclusion workspace     |
+| `/recruitment`         | Recruitment and talent flow workspace          |
+| `/ai-assistant`        | HR policy and workforce intelligence assistant |
 
 ## Demo Login
 
@@ -208,5 +229,5 @@ Both commands should complete successfully.
 
 ## Related Documentation
 
-- [Main project README](.`README.md`)
-- [Machine learning and API documentation](.`README.md`)
+- [Main project README](../README.md)
+- [Machine learning and API documentation](../ml/README.md)
