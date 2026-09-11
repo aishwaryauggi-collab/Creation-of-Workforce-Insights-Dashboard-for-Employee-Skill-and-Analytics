@@ -184,3 +184,277 @@ python tests/test_api.py
 ```
 
 This validates the major components and API functionality of the project.
+
+---
+
+# Milestone 3: Workforce Intelligence Dashboard
+
+Develop an interactive Workforce Insights Dashboard to analyze employee data, workforce trends, attrition risk, diversity metrics, and employee health indicators.
+
+## Dashboard Features
+
+* Workforce headcount and department analysis
+* Diversity and employee demographic metrics
+* Attrition and job-role analysis
+* ML-based employee attrition risk analysis
+* Employee health score analysis
+* Interactive filters and slicers
+* KPI-based workforce insights
+* Executive workforce summaries
+
+---
+
+
+## Step-by-Step Setup
+
+### Step 1: Open the Dashboard 
+
+Open the Power BI dashboard file:
+
+WorkForce_Dashboard.pbix
+
+Open the file using Microsoft Power BI Desktop.
+
+---
+### Step 2: Workforce Overview
+
+The Overview page provides key workforce metrics including:
+
+Total Employees: 1,470
+Employees Left: 237
+Attrition Rate: 16.1%
+High-Risk Employees: 428
+Average Monthly Income: approximately $6.5K
+
+The page also includes visualizations for department, job role, gender, and employee tenure.
+
+---
+### Step 3: Predictive Insights
+
+The Predictive Insights page displays ML-based attrition risk.
+
+Employees are classified into:
+
+High Risk: 428
+Medium Risk: 252
+Low Risk: 790
+
+The page also includes:
+
+Average Risk Score
+Risk Score Distribution
+High-Risk Employees by Department
+Employee Health Score
+Health Score Distribution
+
+The Average Risk Score uses a 0–1 probability scale, while the Health Score uses a 0–100 scale.
+
+---
+### Step 4: Interactive Filters
+
+The dashboard provides filters for:
+
+Department
+Job Role
+Age Group
+Gender
+OverTime
+
+These filters allow users to analyze specific employee groups.
+
+Department and Gender filters are synchronized across the dashboard pages. 
+
+---
+### Step 5: Dashboard Validation
+
+The dashboard metrics are validated for consistency.
+
+High Risk + Medium Risk + Low Risk = Total Employees
+
+428 + 252 + 790 = 1,470
+High-Risk Employees by Department
+
+228 + 182 + 18 = 428
+Employees by Department
+
+961 + 446 + 63 = 1,470
+
+---
+
+
+## Milestone 4: Frontend Dashboard – Workforce Insights Application
+
+A React-based dashboard for exploring workforce analytics, employee performance, attrition risk, workforce health, diversity, recruitment, and HR policies.
+
+## Frontend Features
+
+* Workforce overview and analytics
+* Department and timeframe filters
+* Attrition and retention analysis
+* Employee performance analysis
+* Diversity and recruitment analysis
+* AI-powered HR Policy Assistant
+* RAG-based HR policy search
+* Employee attrition prediction
+* Workforce health score
+* Responsive dashboard layout
+
+---
+
+## Prerequisites
+
+* Node.js 18 or newer
+* npm
+* Python 3.10 or newer
+* FastAPI backend
+
+Check Node.js and npm:
+
+```bash
+node --version
+npm --version
+````
+
+---
+
+## Step-by-Step Setup
+
+## Step 1: Open Frontend
+---
+```bash
+cd frontend
+```
+
+## Step 2: Install Dependencies
+---
+```bash
+npm install
+```
+
+## Step 3: Start Frontend
+---
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+## Step 4: Start Backend
+---
+Open another terminal:
+
+```bash
+cd ml
+uvicorn app.main:app --reload
+```
+
+Backend:
+
+```text
+http://127.0.0.1:8000
+```
+
+API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Step 5: Configure API URL
+---
+Create:
+
+```text
+frontend/.env.local
+```
+
+Add:
+
+```text
+VITE_API_URL=http://localhost:8000
+```
+
+## Step 6: Access Dashboard
+---
+Open:
+
+```text
+http://localhost:5173
+```
+
+Login to access the workforce dashboard.
+
+---
+
+## Dashboard Modules
+
+* **Workforce Overview** – KPIs, departments, filters, and workforce analysis
+* **Retention** – Attrition risk and employee retention analysis
+* **Performance** – Employee performance insights
+* **DEI** – Diversity, Equity, and Inclusion analysis
+* **Recruitment** – Recruitment and talent flow analysis
+* **AI Assistant** – HR policy questions using RAG
+* **Health Score** – Workforce health indicators
+
+---
+
+## Application Routes
+
+| Route           | Description             |
+| --------------- | ----------------------- |
+| `/`             | Login                   |
+| `/dashboard`    | Workforce overview      |
+| `/retention`    | Attrition and retention |
+| `/performance`  | Employee performance    |
+| `/dei`          | Diversity and Inclusion |
+| `/recruitment`  | Recruitment analysis    |
+| `/ai-assistant` | HR Policy Assistant     |
+
+---
+
+## Backend API Integration
+
+| Method | Endpoint             | Purpose                |
+| ------ | -------------------- | ---------------------- |
+| GET    | `/`                  | Backend status         |
+| POST   | `/query`             | HR policy RAG          |
+| POST   | `/health-score`      | Workforce health score |
+| POST   | `/predict-attrition` | Attrition prediction   |
+
+---
+
+## Frontend Technology Stack
+
+* React
+* Vite
+* React Router
+* Tailwind CSS
+* FastAPI
+* Python
+* Machine Learning
+
+---
+
+## Frontend Validation
+
+Run:
+
+```bash
+npm run lint
+npm run build
+```
+
+Both commands should complete successfully without errors.
+
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+```
